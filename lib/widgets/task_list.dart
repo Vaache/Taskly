@@ -1,36 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/models/Task.dart';
+import 'package:taskly/screens/bloc/task_screen_bloc.dart';
+import 'package:taskly/widgets/delete_task_button.dart';
+import 'package:taskly/widgets/set_task_completed_button.dart';
 
 class TaskList extends StatelessWidget {
-  const TaskList({super.key});
+  final Task task;
+  const TaskList({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
-    final List<Task> list = List.generate(
-        10,
-        (index) =>
-            Task(name: "task ${index + 1}", title: 'title ${index + 1}'));
-
-    return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          const SizedBox(
-            height: 20,
-          );
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 5, top: 5),
-            child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 217, 247, 244),
+    return BlocBuilder<TaskScreenBloc, TaskScreenState>(
+      builder: (context, state) {
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(11),
+          ),
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${task.name}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "${task.title}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        if (task.isCompleted)
+                          const Text(
+                            'Task Completed',
+                            style: TextStyle(fontSize: 12, color: Colors.green),
+                          )
+                        else ...[
+                          SetTaskCompletedButton(task: task),
+                          DeleteTaskButton(task: task),
+                        ]
+                      ],
+                    ),
+                  ],
                 ),
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: ListTile(
-                      title: Text(list[index].name!),
-                      subtitle: Text(list[index].title!),
-                    ))),
-          );
-        });
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

@@ -4,9 +4,4 @@ class Task {
   bool isCompleted;
 
   Task({this.name, this.title, this.isCompleted = false});
-
-  @override
-  String toString() {
-    return '$name, $title, $isCompleted';
-  }
 }

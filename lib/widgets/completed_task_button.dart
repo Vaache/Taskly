@@ -1,7 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/constants/task_buttons_constants.dart';
+import 'package:taskly/constants/task_completed_state_constants.dart';
+import 'package:taskly/screens/bloc/task_screen_bloc.dart';
 
 class CompletedTaskButton extends StatelessWidget {
   const CompletedTaskButton({super.key});
@@ -12,7 +13,7 @@ class CompletedTaskButton extends StatelessWidget {
       padding: const EdgeInsets.only(left: buttonDivider),
       child: FloatingActionButton(
         onPressed: () {
-          log('Pressed FAP completed');
+          context.read<TaskScreenBloc>().add(FilterTasksEvent(filter: completed));
         },
         backgroundColor: const Color(0xFFB2DFDB),
         child: const Icon(
